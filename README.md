@@ -83,3 +83,6 @@ In the following example we are excluding React and Lodash:
   }
 }
 ```
+
+
+ <!-- /Users/garrettboone/codes/lightspeed-api-node/lightspeed-api/node_modules/.bin/babel-node --inspect-brk src/lightspeed-api.js -->

@@ -10,19 +10,14 @@ export default class OauthGrant {
         this.lightspeed.tokenExpiresAt = res.data.expires_in + new Date().getTime() / 1000;
       }).catch((err) => {
         throw new Error(err);
-        // debugger;
       });
-    } else {
-      return new Promise((res,reject) => {
-        res(this)
-      }).catch((err) => {
-        throw new Error(err)
-      })
     }
-    // else {
-    // debugger;
-    // return Promise.new();
-    // }
+    return new Promise((res, reject) => {
+      res(this);
+    }).catch((err) => {
+      throw new Error(err);
+    });
+
   }
 
   authorize() {
@@ -30,18 +25,19 @@ export default class OauthGrant {
       method: 'post',
       url: `${this.lightspeed._oauthURL}`,
       headers: {'Content-Type': 'application/json'},
+
       // Data is Body with axios
+
       data: Object.assign(this.lightspeed._config, {'grant_type': 'refresh_token'})
     });
   }
 
   expiredToken() {
-    // debugger;
-    if (!this.lightspeed.tokenExpiresAt){
-      return true
-    } else if(((new Date().getTime() / 1000) - this.lightspeed.tokenExpiresAt) < new Date().getTime() / 1000){
-      false
+    if (!this.lightspeed.tokenExpiresAt) {
+      return true;
+    } else if (((new Date().getTime() / 1000) - this.lightspeed.tokenExpiresAt) < new Date().getTime() / 1000) {
+      return false;
     }
+    return true;
   }
 }
-// Authorization: "Bearer #{LightspeedApi::OauthGrant.token}",

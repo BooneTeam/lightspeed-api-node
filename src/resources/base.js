@@ -16,17 +16,17 @@ export class Resource {
 
   find(id, params, data = {}) {
     const url = this.buildUrl(id, params);
-    
-    if (this._paramKey){
+
+    if (this._paramKey) {
       data[this._paramKey] = id;
     }
-    
+
     return new Request('GET', url, this.lightspeed, data);
   }
 
   buildUrl(id, query) {
     let path = `${this.lightspeed._baseURL}/${this.lightspeed._config.account_id}/${this._resourceName}`;
-    
+
     if (id) { path += `/${id}`; }
     // .replace(/\/+/g, '/')
     // .replace(/\/$/, '');

@@ -1,12 +1,11 @@
 'use-strict';
 
-import {BasicResource, Item} from './resources';
 // TODO require all predefined resources
-// const Item = require('./resources/item');
 const capitalize = require('lodash/capitalize');
 const EventEmitter = require('events');
-// const LeakyBucket = require('leaky-bucket');
-import { LeakyBucket } from './utils';
+
+import {BasicResource, Item} from './resources';
+import {LeakyBucket} from './utils';
 
 const predefinedResources = {
   Item
@@ -43,7 +42,6 @@ export default class LightspeedApi extends EventEmitter {
       }
     }
 
-
     validateConfig(this._config);
   }
 
@@ -59,7 +57,6 @@ export default class LightspeedApi extends EventEmitter {
     Object.assign(myResource, {lightspeed: this});
     return myResource;
   }
-
 
   get baseURL() {
     return this._baseURL;

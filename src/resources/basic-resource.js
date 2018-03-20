@@ -1,9 +1,8 @@
-// const Resource = require('./resources/base');
-import { Resource } from './base'
+import { Resource } from './base';
 
 export class BasicResource extends Resource {
 
-  constructor(resourceName){
+  constructor(resourceName) {
     super(resourceName);
   }
 }

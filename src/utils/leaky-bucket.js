@@ -15,34 +15,31 @@ export class LeakyBucket {
     // Don't like calling .makeCall() and having to put OauthGrant in here.
     return this.queue.add(() => {
       return new Promise((resolve, rej) => {
-        setTimeout(() => {
-          if (this.nextTotal(cost) >= this.max) {
-            setTimeout(() => {
-              console.log(this.lightspeed);
-              new OauthGrant(this.lightspeed).then((respo) => {
-                request.makeCall().then((res) => {
-                  console.log(res.headers);
-                  this.updateLimits(res.headers);
-                  resolve(res);
-                }).catch((err) => {
-                  debugger;
-                  console.log(err)
-                });
-              });
-            },this.timeToWait(cost));
-          } else {
+        if (this.nextTotal(cost) >= this.max) {
+          setTimeout(() => {
+            console.log(this.lightspeed);
             new OauthGrant(this.lightspeed).then((respo) => {
               request.makeCall().then((res) => {
-                console.log(res.headers)
+                console.log(res.headers);
                 this.updateLimits(res.headers);
                 resolve(res);
-              })
-            }).catch((err) => {
-              debugger;
+              }).catch((err) => {
+                console.log(err);
+              });
             });
-          }
-        }, 0);
-      })
+          }, this.timeToWait(cost));
+        } else {
+          new OauthGrant(this.lightspeed).then((respo) => {
+            request.makeCall().then((res) => {
+              console.log(res.headers);
+              this.updateLimits(res.headers);
+              resolve(res);
+            });
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
+      });
     });
   };
 
@@ -70,6 +67,7 @@ export class LeakyBucket {
 
   timeToWait(cost) {
     let over = this.nextTotal(cost) - this.max;
+
     console.log('We would be over by ' + over);
     return (over / this.dripRate) * 1000;
   }

@@ -4,7 +4,7 @@ export default class OauthGrant {
   constructor(config) {
     this.lightspeed = config;
 
-    if (this.expiredToken) {
+    if (this.expiredToken()) {
       return this.authorize().then((res) => {
         this.lightspeed.accessToken = res.data.access_token;
         this.lightspeed.tokenExpiresAt = res.data.expires_in + new Date().getTime() / 1000;
@@ -12,6 +12,12 @@ export default class OauthGrant {
         throw new Error(err);
         // debugger;
       });
+    } else {
+      return new Promise((res,reject) => {
+        res(this)
+      }).catch((err) => {
+        throw new Error(err)
+      })
     }
     // else {
     // debugger;
@@ -30,13 +36,12 @@ export default class OauthGrant {
   }
 
   expiredToken() {
-    debugger;
-    return true;
-    // if (!this.lightspeed.tokenExpiresAt){
-    //   return true
-    // } else if(((new Date().getTime() / 1000) - this.lightspeed.tokenExpiresAt) < new Date().getTime() / 1000){
-    //   return false
-    // }
+    // debugger;
+    if (!this.lightspeed.tokenExpiresAt){
+      return true
+    } else if(((new Date().getTime() / 1000) - this.lightspeed.tokenExpiresAt) < new Date().getTime() / 1000){
+      false
+    }
   }
 }
 // Authorization: "Bearer #{LightspeedApi::OauthGrant.token}",

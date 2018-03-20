@@ -1,5 +1,5 @@
 const axios = require('axios');
-const OauthGrant = require('./ouath-grant');
+// const OauthGrant = require('./ouath-grant');
 
 export default class Request {
   constructor(httpMethod, url, lightspeed, data) {
@@ -27,6 +27,9 @@ export default class Request {
       //   });
       // });
 
+      // new OauthGrant(request.lightspeed).then((respo) => {
+
+      // let call = this.makeCall();
       return this.lightspeed.bucket.throttle(cost, this);
 
       //     this.lightspeed.bucket.throttle(cost, () => {
@@ -66,21 +69,37 @@ export default class Request {
   }
 
   makeCall() {
-    let request = {
-      method: this._method,
-      url: this.url,
-      headers: {
-        'Authorization': `Bearer ${this.lightspeed.accessToken}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      params: {},
-      data: JSON.stringify(this.data) || {}
-    };
+    return new Promise((resolve, reject) => {
+      // This needs to be throttled with the request
+        let request = {
+          method: this._method,
+          url: this.url,
+          headers: {
+            'Authorization': `Bearer ${this.lightspeed.accessToken}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          params: {},
+          data: JSON.stringify(this.data) || {}
+        };
 
-    let req = axios(request);
+        // let req = new Promise((resolve)=> {
+        //   resolve({
+        //     headers: {
+        //       'x-ls-api-drip-rate': 1,
+        //       'x-ls-api-bucket-level': "120/60"
+        //     }
+        //   })
+        // })
 
-    return req;
+        let req = axios(request);
+
+        resolve(req);
+
+      });
+    // });
+
+
   }
 
   // TODO make this throttle test

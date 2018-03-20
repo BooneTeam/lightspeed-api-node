@@ -23,22 +23,16 @@ export default class LightspeedApi extends EventEmitter {
     };
 
     this.accessToken = null;
-    this.tokenExpiresAt = new Date().getTime() / 1000;
+
+    // this.tokenExpiresAt = new Date().getTime() / 1000;
 
     this._name = 'LightspeedApi';
     this._baseURL = 'https://api.merchantos.com/API/Account';
     this._oauthURL = 'https://cloud.merchantos.com/oauth/access_token.php';
 
     // Default
-    this.bucket = new LeakyBucket({current: 58});
-
-
-    this.bucketLevels = {
-      dripRate: 1,
-      bucketMax: 60,
-      bucketCurrent: 0
-    };
-
+    this.bucket = new LeakyBucket({current: 60}, this);
+    
     EventEmitter.call(this);
 
     function validateConfig(config) {
@@ -65,29 +59,7 @@ export default class LightspeedApi extends EventEmitter {
     Object.assign(myResource, {lightspeed: this});
     return myResource;
   }
-
-
-  //
-  // request(url, method, key, params){
-  //   const options = assign({
-  //     headers: { 'Accept':'application/json', 'Content-Type': 'application/json'  },
-  //     timeout: 35,
-  //     json: true,
-  //     method
-  //   }, url);
-  //
-  //   if(this.options.accessToken){
-  //     option.headers['Authorization'] = `Bearer ${this.options.acccesToken}`
-  //   }
-  //
-  //   if (params) {
-  //     const body = key ? { [key]: params } : params;
-  //
-  //     options.headers['Content-Type'] = 'application/json';
-  //     options.body = body;
-  //   }
-  //
-  // }
+  
 
   get baseURL() {
     return this._baseURL;
@@ -98,70 +70,17 @@ export default class LightspeedApi extends EventEmitter {
   }
 }
 
-LightspeedApi.prototype.updateLimits = function(header) {
-  if (!header) return;
-  // const limits = header.split('/').map(Number);
-  // const callLimits = this.callLimits;
-  const bucketLevels = this.bucketLevels;
+let cat = lib.resource('item');
 
-  const dripRate = header['x-ls-api-drip-rate'];
-
-  const bucketLevel = header['x-ls-api-bucket-level'];
-  const bucket = bucketLevel.split('/');
-
-  bucketLevels.dripRate = dripRate;
-  bucketLevels.bucketMax = bucket[1];
-
-  this.bucket.max = parseFloat(bucket[1]);
-  this.bucket.dripRate = parseFloat(dripRate);
-  this.bucket.current = parseFloat(bucket[0]);
-
-  console.log('wtf')
-  console.log(bucket, dripRate);
-  bucketLevels.bucketCurrent = bucket[0];
-
-  //
-  // callLimits.remaining = limits[1] - limits[0];
-  // callLimits.current = limits[0];
-  // callLimits.max = limits[1];
-
-  this.emit('bucketLevels', bucketLevels);
-};
-
-// Object.setPrototypeOf(LightspeedApi.prototype, EventEmitter.prototype);
-
-
-cat.find(1).then(function (r) {
-  console.log('it rans :(')
-}).catch(function (e) {
-  console.log(e)
+new Array(40).fill().forEach(function(poo, i){
+  cat.find(1).then(function (r) {
+    console.log(r.data);
+    console.log(i);
+  }).catch(function (e) {
+    console.log(e)
+  });
 });
 
-cat.find(1).then(function (r) {
-  console.log('it rans :(')
-}).catch(function (e) {
-  console.log(e)
-});
-cat.find(1).then(function (r) {
-  console.log('it rans :(')
-}).catch(function (e) {
-  console.log(e)
-});
-cat.find(1).then(function (r) {
-  console.log('it rans :(')
-}).catch(function (e) {
-  console.log(e)
-});
-cat.find(1).then(function (r) {
-  console.log('it rans :(')
-}).catch(function (e) {
-  console.log(e)
-});
-cat.find(1).then(function (r) {
-  console.log('it rans :(')
-}).catch(function (e) {
-  console.log(e)
-});
 debugger;
 
 

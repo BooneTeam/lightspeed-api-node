@@ -32,7 +32,7 @@ export default class LightspeedApi extends EventEmitter {
 
     // Default
     this.bucket = new LeakyBucket({current: 60}, this);
-    
+
     EventEmitter.call(this);
 
     function validateConfig(config) {
@@ -59,7 +59,7 @@ export default class LightspeedApi extends EventEmitter {
     Object.assign(myResource, {lightspeed: this});
     return myResource;
   }
-  
+
 
   get baseURL() {
     return this._baseURL;
@@ -69,31 +69,3 @@ export default class LightspeedApi extends EventEmitter {
     return this._name;
   }
 }
-
-let cat = lib.resource('item');
-
-new Array(40).fill().forEach(function(poo, i){
-  cat.find(1).then(function (r) {
-    console.log(r.data);
-    console.log(i);
-  }).catch(function (e) {
-    console.log(e)
-  });
-});
-
-debugger;
-
-
-
-
-// OMG item has to be Item
-// let itemResource = lib.resource('item').all();
-// let categoryResource = lib.resource('category');
-// debugger;
-
-// .all().then(function(res){
-// console.log(res.data)
-// })
-// console.log(ls)
-// console.log(lib.resource('item').find(1));
-// /Users/garrettboone/codes/lightspeed-api-node/lightspeed-api/node_modules/.bin/babel-node --inspect-brk src/test.js
